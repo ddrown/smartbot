@@ -15,3 +15,5 @@ function onMessage(client, from, respond, message) {
     money(client, respond, message);
   }
 }
+
+console.log("loaded commands");

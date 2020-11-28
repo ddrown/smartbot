@@ -1,5 +1,5 @@
-const {config} = require('./config');
-const commands = require('./commands');
+const config = require('./smartbot/config');
+const commands = require('./smartbot/commands');
 const irc = require('irc');
 
 const ircOptions = {

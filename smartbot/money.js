@@ -1,4 +1,4 @@
-const {config} = require('./config');
+const config = require('./config');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 
@@ -7,6 +7,7 @@ let rates;
 exports.convertMoney = convertMoney;
 async function convertMoney(amount, from, to) {
   if (rates === undefined || Date.now()/1000 - rates.timestamp > 86400) {
+    console.log("loading exchange rates");
     const query = querystring.stringify({
       app_id: config.app_id
     });
