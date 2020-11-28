@@ -1,5 +1,5 @@
 const config = require('./smartbot/config');
-const commands = require('./smartbot/commands');
+const commands = require('./reloadingCommands');
 const irc = require('irc');
 
 const ircOptions = {
