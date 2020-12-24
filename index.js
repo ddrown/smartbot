@@ -9,7 +9,8 @@ const ircOptions = {
   selfSigned: true,
   port: 6697,
   debug: false,
-  retryDelay: 60000,
+  retryDelay: 120000,
+  retryCount: 1,
 };
 
 const client = new irc.Client(config.server, config.nick, ircOptions);
@@ -29,4 +30,11 @@ client.addListener('pm', (from, message) => {
 client.addListener('motd', (motd) => {
   console.log("connected, joining");
   client.join(config.channel);
+});
+
+client.addListener('abort', (count) => {
+  console.log(`aborted after ${count} times`);
+  // setTimeout(() => {
+  //      self.connect(0);
+  //  }, 3600 * 1000);
 });
