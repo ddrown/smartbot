@@ -1,4 +1,16 @@
 const convert = require('convert-units');
+const speed = require('convert-units/lib/definitions/speed');
+const power = require('convert-units/lib/definitions/power');
+
+speed.imperial.mph = speed.imperial["m/h"];
+speed.metric.mach = {
+  name: { singular: 'mach', plural: 'mach' },
+  to_anchor: 1234.8
+};
+power.metric.hp = {
+  name: { singular: 'hp', plural: 'hp' },
+  to_anchor: 745.7
+};
 
 exports.convertUnit = convertUnit;
 function convertUnit(client, respond, message) {
@@ -18,7 +30,8 @@ function convertUnit(client, respond, message) {
     const out = convert(amount).from(from).to(to);
     client.say(respond, `${amount} ${from} is ${out.toFixed(2)} ${to}`);
   } catch(e) {
-    client.say(respond, `!convert error: ${e.message}`);
+    const message = e.message.length > 100 ? e.message.substring(0, 100) + "..." : e.message;
+    client.say(respond, `!convert error: ${message}`);
   }
 }
 
