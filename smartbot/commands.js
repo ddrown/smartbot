@@ -1,5 +1,6 @@
 const {money} = require("./money");
 const {convertUnit, measures} = require("./units");
+const {doMath} = require("./math");
 
 exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
@@ -13,6 +14,8 @@ function onMessage(client, from, respond, message) {
     measures(client, respond, message);
   } else if (message.startsWith("!money ")) {
     money(client, respond, message);
+  } else if (message.startsWith("!math ") || message === "!math") {
+    doMath(client, respond, message);
   }
 }
 
