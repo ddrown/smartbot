@@ -1,0 +1,15 @@
+--- node_modules/irc/lib/irc.js.orig	2020-12-26 01:56:14.142422425 -0600
++++ node_modules/irc/lib/irc.js	2020-11-27 16:54:39.350926252 -0600
+@@ -888,9 +888,10 @@
+             self.conn.connected = true;
+             if (self.conn.authorized ||
+                 (self.opt.selfSigned &&
+-                    (self.conn.authorizationError   === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
++                    (self.conn.authorizationError === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
+                      self.conn.authorizationError === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE' ||
+-                     self.conn.authorizationError === 'SELF_SIGNED_CERT_IN_CHAIN')) ||
++                     self.conn.authorizationError === 'SELF_SIGNED_CERT_IN_CHAIN' ||
++                     self.conn.authorizationError === 'ERR_TLS_CERT_ALTNAME_INVALID')) ||
+                 (self.opt.certExpired &&
+                  self.conn.authorizationError === 'CERT_HAS_EXPIRED')) {
+                 // authorization successful

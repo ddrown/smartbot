@@ -1,0 +1,9 @@
+{
+  "username": "somebot",
+  "realname": "some smart bot",
+  "server": "irc.example.net",
+  "nick": "somebot",
+  "channel": "#botchannel",
+  "app_id": "api key from openexchangerates.org",
+  "weather_app_id": "api key from openweathermap.org"
+}
