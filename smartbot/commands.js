@@ -2,6 +2,7 @@ const {money} = require("./money");
 const {convertUnit, measures} = require("./units");
 const {weather} = require("./weather");
 const {doMath} = require("./math");
+const {redditCat} = require("./reddit");
 
 exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
@@ -25,6 +26,8 @@ function onMessage(client, from, respond, message) {
     weather(client, respond, message);
   } else if (message.startsWith("!math ") || message === "!math") {
     doMath(client, respond, message);
+  } else if (message === "!cat") {
+    redditCat(client, respond, message);
   }
 }
 
