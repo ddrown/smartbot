@@ -29,7 +29,11 @@ client.addListener('pm', (from, message) => {
 
 client.addListener('motd', (motd) => {
   console.log("connected, joining");
-  client.join(config.channel);
+  if(typeof config.channel === "object") {
+    config.channel.forEach((channel) => client.join(channel));
+  } else {
+    client.join(config.channel);
+  }
 });
 
 client.addListener('abort', (count) => {
