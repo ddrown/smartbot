@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sudo docker logs -f smartbot
