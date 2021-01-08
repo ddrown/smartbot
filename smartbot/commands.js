@@ -3,12 +3,15 @@ const {convertUnit, measures} = require("./units");
 const {weather} = require("./weather");
 const {doMath} = require("./math");
 const {redditCat} = require("./reddit");
+const {urlTitle, otherBotTraffic} = require("./urls");
 
 exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
   message = message.trim();
 
-  if (message === "who's a smart bot?") {
+  if (from === "f33rBOT") {
+    otherBotTraffic(client, respond, message, from);
+  } else if (message === "who's a smart bot?") {
     client.say(respond, "that's me!");
   } else if (message === "!botsnack") {
     client.say(respond, "thanks for the snack nom nom nom");
@@ -28,6 +31,8 @@ function onMessage(client, from, respond, message) {
     doMath(client, respond, message);
   } else if (message === "!cat") {
     redditCat(client, respond, message);
+  } else if (message.match(/https?:\/\//)) {
+    urlTitle(client, respond, message);
   } else if (message === "!hack") {
     client.say(respond, "No hax smartbot!");
   }
