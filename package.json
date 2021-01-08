@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "convert-units": "^2.3.4",
+    "html-entities": "^2.0.2",
     "irc": "github:matrix-org/node-irc",
     "mathjs": "^8.1.0",
     "node-fetch": "^2.6.1"

@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 const {sleep} = require('./utils');
+const {decode} = require('html-entities');
 
 const omebedMapping = {
   "youtube.com": {
@@ -23,7 +24,7 @@ function youtubeTitle(urlInfo) {
 
 function tweet(urlInfo) {
   const html = urlInfo.html;
-  return html.replace(/<[^>]*>/g, "");
+  return decode(html.replace(/<[^>]*>/g, ""), {scope: "strict"});
 }
 
 let lastSawOtherBot = 0;
