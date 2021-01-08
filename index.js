@@ -1,6 +1,7 @@
 const config = require('./smartbot/config');
 const commands = require('./reloadingCommands');
 const irc = require('irc');
+const {sleep} = require('./smartbot/utils');
 
 const ircOptions = {
   userName: config.username,
@@ -27,7 +28,9 @@ client.addListener('pm', (from, message) => {
   console.log(`${from} => ME: ${message}`);
 });
 
+let connected = false;
 client.addListener('motd', (motd) => {
+  connected = true;
   console.log("connected, joining");
   if(typeof config.channel === "object") {
     config.channel.forEach((channel) => client.join(channel));
@@ -36,9 +39,14 @@ client.addListener('motd', (motd) => {
   }
 });
 
-client.addListener('abort', (count) => {
+client.addListener('abort', async (count) => {
+  connected = false;
   console.log(`aborted after ${count} times`);
-  // setTimeout(() => {
-  //      self.connect(0);
-  //  }, 3600 * 1000);
+  await sleep(300000);
+  if (!connected) {
+    console.log("I would reconnect here");
+    // client.connect(0);
+  } else {
+    console.log("Already reconnected");
+  }
 });

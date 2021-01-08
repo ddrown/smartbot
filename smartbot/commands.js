@@ -28,6 +28,8 @@ function onMessage(client, from, respond, message) {
     doMath(client, respond, message);
   } else if (message === "!cat") {
     redditCat(client, respond, message);
+  } else if (message === "!hack") {
+    client.say(respond, "No hax smartbot!");
   }
 }
 
