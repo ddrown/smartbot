@@ -33,6 +33,36 @@ async function convertMoney(amount, from, to) {
   return amount / rates.rates[from] * rates.rates[to];
 }
 
+
+const cryptoNames = new Set(["XBT", "BTC", "ETH","USDT"]);
+const fiatNames = new Set(["USD","CAD","EUR","GBP"]);
+async function crypto(amount, from, to) {
+  const fromCrypto = cryptoNames.has(from);
+  const cryptoName = fromCrypto ? from : to;
+  const fiatName = fromCrypto ? to : from;
+// c[0]
+  const query = querystring.stringify({
+    pair: `${cryptoName}${fiatName}`
+  });
+  const url = `https://api.kraken.com/0/public/Ticker?${query}`;
+  const headers = {
+    "User-Agent": `smartbot/0.1 (https://github.com/ddrown/smartbot) node-fetch/2.6.1`,
+    "Accept": "application/json",
+    "Accept-Language": "en"
+  };
+
+  const rates = await fetch(url, {headers}).then(res => res.json());
+  if(rates.error !== undefined && rates.error.length > 0) {
+    console.log(rates);
+    throw new Error(rates.error[0]);
+  }
+  for (const [key, value] of Object.entries(rates.result)) {
+    const lastPrice = parseFloat(value.c[0]);
+    const newAmount = fromCrypto ? amount*lastPrice : amount/lastPrice;
+    return newAmount;
+  }
+}
+
 exports.money = money;
 async function money(client, respond, message) {
   const command = message.split(' ');
@@ -47,8 +77,10 @@ async function money(client, respond, message) {
   }
   const from = command[2];
   const to = command[3];
+  const isCrypto = cryptoNames.has(from) || cryptoNames.has(to);
+  const convertFunc = isCrypto ? crypto : convertMoney;
   try {
-    const out = await convertMoney(amount, from, to);
+    const out = await convertFunc(amount, from, to);
     client.say(respond, `${amount} ${from} is ${out.toFixed(2)} ${to}`);
   } catch(e) {
     client.say(respond, `!money error: ${e.message}`);
