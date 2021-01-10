@@ -5,11 +5,16 @@ const querystring = require('querystring');
 
 async function getWeather(city) {
   console.log(`loading weather for ${city}`);
-  const query = querystring.stringify({
-    q: city,
+  const params = {
     appid: config.weather_app_id,
     units: "metric"
-  });
+  };
+  if(city.match(/^\d+$/)) {
+    params.zip = `${city},us`;
+  } else {
+    params.q = city;
+  }
+  const query = querystring.stringify(params);
   console.log(query);
   const conditions = await fetch(`https://api.openweathermap.org/data/2.5/weather?${query}`).then(res => res.json());
   console.log(conditions);
@@ -26,11 +31,12 @@ async function getWeather(city) {
 exports.weather = weather;
 async function weather(client, respond, message) {
   const command = message.split(' ');
-  if (command.length !== 2) {
+  if (command.length < 2) {
     client.say(respond, "!weather [city]");
     return;
   }
-  const city = command[1];
+  command.shift();
+  const city = command.join(" ");
   try {
     const out = await getWeather(city);
     client.say(respond, out);
