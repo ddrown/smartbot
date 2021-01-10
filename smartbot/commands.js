@@ -1,3 +1,4 @@
+const config = require("./config");
 const {money} = require("./money");
 const {convertUnit, measures} = require("./units");
 const {weather} = require("./weather");
@@ -9,8 +10,8 @@ exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
   message = message.trim();
 
-  if (from === "f33rBOT") {
-    otherBotTraffic(client, respond, message, from);
+  if (config.otherBot && from === config.otherBot.nick) {
+    otherBotTraffic(client, respond, message);
   } else if (message === "who's a smart bot?") {
     client.say(respond, "that's me!");
   } else if (message === "!botsnack") {

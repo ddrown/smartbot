@@ -5,5 +5,6 @@
   "nick": "somebot",
   "channel": "#botchannel",
   "app_id": "api key from openexchangerates.org",
-  "weather_app_id": "api key from openweathermap.org"
+  "weather_app_id": "api key from openweathermap.org",
+  "email": "set-this-email@example.com"
 }
