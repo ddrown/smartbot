@@ -20,7 +20,7 @@ function reloadModules() {
 }
 
 function fileEvents(eventType, filename) {
-  if (filename.endsWith(".js")) {
+  if (filename.endsWith(".js") || filename.endsWith(".json")) {
     reloadSet.add(filename);
     if (reloadId === undefined) {
       // allow 500ms to combine all the changes
