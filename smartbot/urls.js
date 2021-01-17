@@ -11,7 +11,12 @@ const titleMapping = {
   "en.wikipedia.org": wikipedia,
   "reddit.com": reddit,
   "www.reddit.com": reddit,
-  "old.reddit.com": reddit
+  "old.reddit.com": reddit,
+  "i.redd.it": redditImg,
+  "v.redd.it": redditImg,
+  "i.imgur.com": redditImg,
+  "imgur.com": redditImg,
+  "gfycat.com": redditImg
 };
 
 async function oembed(queryUrl, url) {
@@ -35,6 +40,30 @@ async function reddit(url) {
   return urlInfo.title;
 }
 
+async function redditImg(url) {
+  if (
+      !url.match(/^https:\/\/[iv]\.redd\.it\/[a-zA-Z0-9]+(\.gif|\.jpg|\.png|)$/) &&
+      !url.match(/^https:\/\/(i\.)?imgur.com\/[a-zA-Z0-9]+(\.gif|\.jpg|\.gifv|\.png|)$/) &&
+      !url.match(/^https:\/\/gfycat.com\/[a-zA-Z0-9]+$/)
+  ) {
+    return;
+  }
+  const searchUrl = `https://www.reddit.com/search.json?q=url:${url}`;
+
+  const headers = {
+    "User-Agent": `smartbot/0.1 (https://github.com/ddrown/smartbot; ${config.email}) node-fetch/2.6.1`,
+    "Accept": "application/json; charset=utf-8",
+    "Accept-Language": "en"
+  };
+
+  const urlInfo = await fetch(searchUrl, {headers}).then(res => res.json());
+  if(!urlInfo.data.children.length) {
+    return;
+  }
+  const firstResult = urlInfo.data.children[0].data;
+  return `[${firstResult.subreddit_name_prefixed}] ${firstResult.title}`;
+}
+
 async function wikipedia(url) {
   const pageMatch = url.match(/en.wikipedia.org\/wiki\/([^\/?#]+)/);
   if (!pageMatch) {
@@ -54,6 +83,9 @@ async function wikipedia(url) {
 }
 
 function fixSummary(summary) {
+  if (summary === undefined || summary === null) {
+    return;
+  }
   if (summary.indexOf("\n") >= 0) {
     summary = summary.substring(0, summary.indexOf("\n")) + "...";
   }
@@ -89,7 +121,9 @@ async function urlTitle(client, respond, message) {
     }
 
     const summary = fixSummary(await getTitle(parsedUrl.href));
-    client.say(respond, `url: ${summary}`);
+    if(summary) {
+      client.say(respond, `url: ${summary}`);
+    }
   } catch(e) {
     console.log(`Error parsing message ${message}`);
     console.log(e);
