@@ -5,6 +5,7 @@ const {weather} = require("./weather");
 const {doMath} = require("./math");
 const {redditCat} = require("./reddit");
 const {urlTitle, otherBotTraffic} = require("./urls");
+const {getCases} = require("./covid19");
 
 exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
@@ -36,6 +37,8 @@ function onMessage(client, from, respond, message) {
     urlTitle(client, respond, message);
   } else if (message === "!hack") {
     client.say(respond, "No hax smartbot!");
+  } else if (message.match(/is the pandemic over yet\?/i)) {
+    getCases(client, respond, message);
   }
 }
 
