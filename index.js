@@ -44,8 +44,8 @@ client.addListener('abort', async (count) => {
   console.log(`aborted after ${count} times`);
   await sleep(300000);
   if (!connected) {
-    console.log("I would reconnect here");
-    // client.connect(0);
+    console.log("Trying to connect again");
+    client.connect(0);
   } else {
     console.log("Already reconnected");
   }
