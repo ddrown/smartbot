@@ -32,7 +32,8 @@ async function youtube(url) {
 async function twitter(url) {
   const urlInfo = await oembed("https://publish.twitter.com/oembed", url);
   const html = urlInfo.html;
-  return decode(html.replace(/<[^>]*>/g, ""), {scope: "strict"});
+  const newlineHtml = html.replace(/(<br>)+/ig, " ").replace(/([^ ])(<a)/ig, "$1 $2");
+  return decode(newlineHtml.replace(/<[^>]*>/g, ""), {scope: "strict"});
 }
 
 async function reddit(url) {
