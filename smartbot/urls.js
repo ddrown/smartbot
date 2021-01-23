@@ -5,6 +5,7 @@ const querystring = require('querystring');
 const {sleep} = require('./utils');
 
 const titleMapping = {
+  "www.youtube.com": youtube,
   "youtube.com": youtube,
   "youtu.be": youtube,
   "twitter.com": twitter,
