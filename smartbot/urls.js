@@ -3,6 +3,7 @@ const {decode} = require('html-entities');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 const {sleep} = require('./utils');
+const {metaDescription} = require('./htmlurls');
 
 const titleMapping = {
   "www.youtube.com": youtube,
@@ -17,7 +18,8 @@ const titleMapping = {
   "v.redd.it": redditImg,
   "i.imgur.com": redditImg,
   "imgur.com": redditImg,
-  "gfycat.com": redditImg
+  "gfycat.com": redditImg,
+  "www.reuters.com": metaDescription
 };
 
 async function oembed(queryUrl, url) {
