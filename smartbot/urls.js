@@ -19,7 +19,8 @@ const titleMapping = {
   "i.imgur.com": redditImg,
   "imgur.com": redditImg,
   "gfycat.com": redditImg,
-  "www.reuters.com": metaDescription
+  "www.reuters.com": metaDescription,
+  "www.theglobeandmail.com": metaDescription
 };
 
 async function oembed(queryUrl, url) {
