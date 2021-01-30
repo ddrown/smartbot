@@ -17,3 +17,20 @@ async function metaDescription(url) {
   return metaDescription.getAttribute("content");
 }
 exports.metaDescription = metaDescription;
+
+async function title(url) {
+  const html = await fetch(url).then(res => res.text());
+  if(!html) {
+    return "[no html returned]";
+  }
+  const dom = parse(html);
+  if(!dom) {
+    return "[parser failure]";
+  }
+  const titleText = dom.querySelector("title");
+  if(!titleText) {
+    return "[no title]";
+  }
+  return titleText.text;
+}
+exports.title = title;
