@@ -3,24 +3,32 @@ const {decode} = require('html-entities');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 const {sleep} = require('./utils');
-const {metaDescription} = require('./htmlurls');
+const {metaDescription, title} = require('./htmlurls');
 
 const titleMapping = {
-  "www.youtube.com": youtube,
-  "youtube.com": youtube,
-  "youtu.be": youtube,
-  "twitter.com": twitter,
+  "arstechnica.com": metaDescription,
   "en.wikipedia.org": wikipedia,
-  "reddit.com": reddit,
-  "www.reddit.com": reddit,
-  "old.reddit.com": reddit,
-  "i.redd.it": redditImg,
-  "v.redd.it": redditImg,
+  "gfycat.com": redditImg,
+  "globalnews.ca": metaDescription,
   "i.imgur.com": redditImg,
   "imgur.com": redditImg,
-  "gfycat.com": redditImg,
+  "i.redd.it": redditImg,
+  "nationalpost.com": metaDescription,
+  "old.reddit.com": reddit,
+  "reddit.com": reddit,
+  "techcrunch.com": title,
+  "twitter.com": twitter,
+  "v.redd.it": redditImg,
+  "www.cbc.ca": metaDescription,
+  "www.ctvnews.ca": metaDescription,
+  "www.reddit.com": reddit,
   "www.reuters.com": metaDescription,
-  "www.theglobeandmail.com": metaDescription
+  "www.theatlantic.com": metaDescription,
+  "www.theglobeandmail.com": metaDescription,
+  "www.theverge.com": metaDescription,
+  "www.youtube.com": youtube,
+  "youtube.com": youtube,
+  "youtu.be": youtube
 };
 
 async function oembed(queryUrl, url) {
