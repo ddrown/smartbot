@@ -7,6 +7,7 @@ const {redditCat} = require("./reddit");
 const {urlTitle, otherBotTraffic} = require("./urls");
 const {getCases} = require("./covid19");
 const {finance} = require("./finance");
+const {getKarma, updateKarma, botsnack, dumbbot} = require("./karma");
 
 exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
@@ -17,9 +18,9 @@ function onMessage(client, from, respond, message) {
   } else if (message === "who's a smart bot?") {
     client.say(respond, "that's me!");
   } else if (message === "!botsnack") {
-    client.say(respond, "thanks for the snack nom nom nom");
+    botsnack(client, respond, message);
   } else if (message === "dumb bot") {
-    client.say(respond, "I'll have you know I'm very smart thank you very much");
+    dumbbot(client, respond, message);
   } else if (message.startsWith("!convert ")) {
     convertUnit(client, respond, message);
   } else if (message.startsWith("!measures ") || message === "!measures") {
@@ -42,6 +43,10 @@ function onMessage(client, from, respond, message) {
     finance(client, respond, message);
   } else if (message.match(/is the pandemic over yet\?/i)) {
     getCases(client, respond, message);
+  } else if (message.startsWith("!karma ") || message === "!karma") {
+    getKarma(client, respond, message);
+  } else if (message.match(/^[a-z0-9]+(\+\+|--)$/i)) {
+    updateKarma(client, respond, message, from);
   }
 }
 
