@@ -14,6 +14,7 @@ const titleMapping = {
   "imgur.com": redditImg,
   "i.redd.it": redditImg,
   "nationalpost.com": metaDescription,
+  "news.ycombinator.com": title,
   "old.reddit.com": reddit,
   "reddit.com": reddit,
   "techcrunch.com": title,
@@ -26,7 +27,9 @@ const titleMapping = {
   "www.theatlantic.com": metaDescription,
   "www.theglobeandmail.com": metaDescription,
   "www.theverge.com": metaDescription,
+  "www.vice.com": title,
   "www.youtube.com": youtube,
+  "www.zerohedge.com": title,
   "youtube.com": youtube,
   "youtu.be": youtube
 };
