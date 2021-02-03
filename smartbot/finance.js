@@ -25,6 +25,9 @@ function strState(price) {
 async function getPrice(ticker) {
   const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=price`;
   const quote = await fetch(url).then(res => res.json());
+  if(quote.quoteSummary.error) {
+    return quote.quoteSummary.error.description;
+  }
   const price = quote.quoteSummary.result[0].price;
 
   if(price.shortName === null || price.shortName === undefined) {
