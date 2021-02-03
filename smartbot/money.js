@@ -66,17 +66,18 @@ async function crypto(amount, from, to) {
 exports.money = money;
 async function money(client, respond, message) {
   const command = message.split(' ');
-  if (command.length !== 4) {
+  command.shift(); // !money
+  if (command.length !== 3 && command.length !== 2) {
     client.say(respond, "!money # from to");
     return;
   }
-  const amount = parseFloat(command[1]);
+  const amount = parseFloat(command.length === 3 ? command.shift() : "1");
   if (isNaN(amount)) {
     client.say(respond, "!money # from to");
     return;
   }
-  const from = command[2];
-  const to = command[3];
+  const from = command.shift();
+  const to = command.shift();
   const isCrypto = cryptoNames.has(from) || cryptoNames.has(to);
   const convertFunc = isCrypto ? crypto : convertMoney;
   try {
