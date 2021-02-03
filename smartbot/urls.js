@@ -6,7 +6,9 @@ const {sleep} = require('./utils');
 const {metaDescription, title} = require('./htmlurls');
 
 const titleMapping = {
+  "apple.news": title,
   "arstechnica.com": metaDescription,
+  "blog.dan.drown.org": metaDescription,
   "en.wikipedia.org": wikipedia,
   "gfycat.com": redditImg,
   "globalnews.ca": metaDescription,
