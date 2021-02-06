@@ -75,8 +75,8 @@ async function money(client, respond, message) {
     client.say(respond, "!money # from to");
     return;
   }
-  const from = command.shift();
-  const to = command.shift();
+  const from = command.shift().toUpperCase();
+  const to = command.shift().toUpperCase();
   const isCrypto = cryptoNames.has(from) || cryptoNames.has(to);
   const convertFunc = isCrypto ? crypto : convertMoney;
   try {
