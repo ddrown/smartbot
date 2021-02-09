@@ -34,12 +34,15 @@ async function convertMoney(amount, from, to) {
 }
 
 
-const cryptoNames = new Set(["XBT", "BTC", "ETH", "USDT", "ZEC"]);
+const cryptoNames = new Set(["XBT", "BTC", "ETH", "USDT", "ZEC", "BCH"]);
 async function crypto(amount, from, to) {
   const fromCrypto = cryptoNames.has(from);
   const cryptoName = fromCrypto ? from : to;
   const fiatName = fromCrypto ? to : from;
-// c[0]
+  const pair = `${cryptoName}${fiatName}`;
+  if (pair === "BCHCAD") {
+    throw new Error("Kraken does not have BCH + CAD");
+  }
   const query = querystring.stringify({
     pair: `${cryptoName}${fiatName}`
   });
