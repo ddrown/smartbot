@@ -34,7 +34,7 @@ async function convertMoney(amount, from, to) {
 }
 
 
-const cryptoNames = new Set(["XBT", "BTC", "ETH", "USDT", "ZEC", "BCH"]);
+const cryptoNames = new Set(["XBT", "BTC", "ETH", "USDT", "ZEC", "BCH", "LTC", "XDG"]);
 async function crypto(amount, from, to) {
   const fromCrypto = cryptoNames.has(from);
   const cryptoName = fromCrypto ? from : to;
