@@ -1,9 +1,8 @@
 const fetch = require('node-fetch');
-const csvparse = require('csv-parse');
 const {pipeline} = require('stream');
 
 const covidData = {
-  lastTwo: [],
+  data: {},
   timestamp: 0
 };
 
@@ -11,27 +10,20 @@ async function getCovidData() {
   if(Date.now() - covidData.timestamp < 86400000) {
     return;
   }
+
+  const data = await fetch("https://covid.cdc.gov/covid-data-tracker/COVIDData/getAjaxData?id=statusBar_external_data").then(res => res.json());
+  covidData.data = data;
   covidData.timestamp = Date.now();
-
-  const req = await fetch("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv");
-  const parser = req.body.pipe(csvparse());
-
-  for await (const record of parser) {
-    covidData.lastTwo.push(record);
-    if(covidData.lastTwo.length > 2) {
-      covidData.lastTwo.shift();
-    }
-  }
 }
 
 async function getCases(client, respond, message) {
   try {
     await getCovidData();
-    const before = covidData.lastTwo[0];
-    const after = covidData.lastTwo[1];
-    const cases = after[1] - before[1];
-    const deaths = after[2] - before[2];
-    client.say(respond, `between ${before[0]} and ${after[0]}, there were ${cases} cases and ${deaths} deaths in the US`);
+    const date = covidData.data.statusBar[0]["cases-7-day"][0][1];
+    const cases = covidData.data.statusBar[0]["cases-7-day"][0][0];
+    const deaths = covidData.data.statusBar[0]["deaths-7-day"][0][0];
+    const vaccines = covidData.data.statusBar[0]["Administered_US"];
+    client.say(respond, `In the US on ${date}, there were ${cases} cases and ${deaths} deaths. ${vaccines} vaccine doses have been administered.`);
   } catch(e) {
     console.log(e);
   }
