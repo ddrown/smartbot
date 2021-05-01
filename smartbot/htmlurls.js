@@ -1,7 +1,7 @@
 const {parse} = require('node-html-parser');
 const fetch = require('node-fetch');
 
-async function metaDescription(url) {
+async function urlQueryElement(url, selector) {
   const html = await fetch(url).then(res => res.text());
   if(!html) {
     return "[no html returned]";
@@ -10,27 +10,36 @@ async function metaDescription(url) {
   if(!dom) {
     return "[parser failure]";
   }
-  const metaDescription = dom.querySelector("meta[name='description']");
-  if(!metaDescription) {
-    return "[no meta description]";
+  const element = dom.querySelector(selector);
+  if(!element) {
+    return "[no element selected]";
+  }
+  return element;
+}
+
+async function metaDescription(url) {
+  const metaDescription = await urlQueryElement(url, "meta[name='description']");
+  if(typeof metaDescription === "string") {
+    return metaDescription;
   }
   return metaDescription.getAttribute("content");
 }
 exports.metaDescription = metaDescription;
 
 async function title(url) {
-  const html = await fetch(url).then(res => res.text());
-  if(!html) {
-    return "[no html returned]";
-  }
-  const dom = parse(html);
-  if(!dom) {
-    return "[parser failure]";
-  }
-  const titleText = dom.querySelector("title");
-  if(!titleText) {
-    return "[no title]";
+  const titleText = await urlQueryElement(url, "title");
+  if(typeof titleText === "string") {
+    return titleText;
   }
   return titleText.text;
 }
 exports.title = title;
+
+async function ogTitle(url) {
+  const titleText = await urlQueryElement(url, "meta[property='og:title']");
+  if(typeof titleText === "string") {
+    return titleText;
+  }
+  return titleText.getAttribute("content");
+}
+exports.ogTitle = ogTitle;
