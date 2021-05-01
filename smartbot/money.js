@@ -34,10 +34,10 @@ async function convertMoney(amount, from, to) {
 }
 
 
-const cryptoNames = new Set(["XBT", "BTC", "ETH", "USDT", "ZEC", "BCH", "LTC", "XDG"]);
+const cryptoNames = new Set(["XBT", "BTC", "ETH", "USDT", "ZEC", "BCH", "LTC", "XDG", "DOGE", "XRP"]);
 async function crypto(amount, from, to) {
   const fromCrypto = cryptoNames.has(from);
-  const cryptoName = fromCrypto ? from : to;
+  const cryptoName = remapNames(fromCrypto ? from : to);
   const fiatName = fromCrypto ? to : from;
   const pair = `${cryptoName}${fiatName}`;
   if (pair === "BCHCAD") {
@@ -63,6 +63,13 @@ async function crypto(amount, from, to) {
     const newAmount = fromCrypto ? amount*lastPrice : amount/lastPrice;
     return newAmount;
   }
+}
+
+function remapNames(cryptoName) {
+  if (cryptoName === "DOGE") {
+    return "XDG";
+  }
+  return cryptoName;
 }
 
 exports.money = money;
