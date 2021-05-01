@@ -23,7 +23,7 @@ async function getCases(client, respond, message) {
     const cases = covidData.data.statusBar[0]["cases-7-day"][0][0];
     const deaths = covidData.data.statusBar[0]["deaths-7-day"][0][0];
     const vaccines = covidData.data.statusBar[0]["Administered_US"];
-    client.say(respond, `In the US on ${date}, there were ${cases} cases and ${deaths} deaths. ${vaccines} vaccine doses have been administered.`);
+    client.say(respond, `The 7 days ending on ${date}, there were ${cases} cases and ${deaths} deaths in the US. ${vaccines} vaccine doses have been administered.`);
   } catch(e) {
     console.log(e);
   }
