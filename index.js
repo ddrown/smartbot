@@ -28,6 +28,14 @@ client.addListener('pm', (from, message) => {
   console.log(`${from} => ME: ${message}`);
 });
 
+client.addListener('ctcp-version', (from, to, message) => {
+  if (!to.startsWith("#")) {
+    client.ctcp(from, "notice", "VERSION smartbot v1.0");
+  } else {
+    console.log(`${from} => ${to} ${message}, ignored`);
+  }
+});
+
 let connected = false;
 client.addListener('motd', (motd) => {
   connected = true;
