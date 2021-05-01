@@ -8,7 +8,7 @@ const ircOptions = {
   realName: config.realname,
   secure: true,
   selfSigned: true,
-  port: 6697,
+  port: config.serverport || 6697,
   debug: false,
   retryDelay: 120000,
   retryCount: 1,

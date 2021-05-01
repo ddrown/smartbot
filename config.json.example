@@ -2,6 +2,7 @@
   "username": "somebot",
   "realname": "some smart bot",
   "server": "irc.example.net",
+  "serverport": 9999,
   "nick": "somebot",
   "channel": "#botchannel",
   "app_id": "api key from openexchangerates.org",
