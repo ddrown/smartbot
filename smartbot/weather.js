@@ -15,7 +15,6 @@ async function getWeather(city) {
     params.q = city;
   }
   const query = querystring.stringify(params);
-  console.log(query);
   const conditions = await fetch(`https://api.openweathermap.org/data/2.5/weather?${query}`).then(res => res.json());
   console.log(conditions);
   if (!conditions.hasOwnProperty("main")) {
