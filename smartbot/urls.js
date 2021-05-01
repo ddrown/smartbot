@@ -3,31 +3,38 @@ const {decode} = require('html-entities');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 const {sleep} = require('./utils');
-const {metaDescription, title} = require('./htmlurls');
+const {metaDescription, ogTitle, title} = require('./htmlurls');
 
 const titleMapping = {
   "abcnews.go.com": metaDescription,
   "apple.news": title,
   "arstechnica.com": metaDescription,
   "blog.dan.drown.org": metaDescription,
-  "dfw.cbslocal.com": title,
+  ".cbslocal.com": title,
+  ".ctvnews.ca": metaDescription,
   "en.wikipedia.org": wikipedia,
   "gfycat.com": redditImg,
   "globalnews.ca": metaDescription,
   "i.imgur.com": redditImg,
   "imgur.com": redditImg,
   "i.redd.it": redditImg,
+  ".medium.com": ogTitle,
   "nationalpost.com": metaDescription,
   "news.ycombinator.com": title,
   "old.reddit.com": reddit,
   "reddit.com": reddit,
   "techcrunch.com": title,
+  "torontosun.com": ogTitle,
   "twitter.com": twitter,
   "v.redd.it": redditImg,
+  "www.austinchronicle.com": ogTitle,
   "www.bbc.com": title,
   "www.cbc.ca": metaDescription,
-  "www.ctvnews.ca": metaDescription,
+  "www.cnbc.com": metaDescription,
+  "www.cnn.com": metaDescription,
+  "www.ksat.com": title,
   "www.kvue.com": title,
+  "www.latimes.com": metaDescription,
   "www.reddit.com": reddit,
   "www.reuters.com": metaDescription,
   "www.theatlantic.com": metaDescription,
@@ -37,7 +44,7 @@ const titleMapping = {
   "www.youtube.com": youtube,
   "www.zerohedge.com": title,
   "youtube.com": youtube,
-  "youtu.be": youtube
+  "youtu.be": youtube,
 };
 
 async function oembed(queryUrl, url) {
@@ -117,6 +124,19 @@ function fixSummary(summary) {
   return summary;
 }
 
+function hostToGetTitle(host) {
+  if (titleMapping[host]) {
+    return titleMapping[host];
+  }
+
+  const stripHost = host.match(/^([^.]+)(\..*)/);
+  if(stripHost && titleMapping[stripHost[2]]) {
+    return titleMapping[stripHost[2]];
+  }
+
+  return undefined;
+}
+
 let lastSawOtherBot = 0;
 
 async function urlTitle(client, respond, message) {
@@ -127,7 +147,7 @@ async function urlTitle(client, respond, message) {
     }
 
     const parsedUrl = new URL(url[1]);
-    const getTitle = titleMapping[parsedUrl.host];
+    const getTitle = hostToGetTitle(parsedUrl.host);
     if(!getTitle) {
       return;
     }
