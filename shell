@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo docker exec -it smartbot /bin/bash
+docker exec -it smartbot /bin/bash
