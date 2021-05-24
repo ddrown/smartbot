@@ -47,6 +47,8 @@ function onMessage(client, from, respond, message) {
     getKarma(client, respond, message);
   } else if (message.match(/^[a-z0-9]+(\+\+|--)$/i)) {
     updateKarma(client, respond, message, from);
+  } else if (message === "!starman") {
+    client.say(respond, "https://dan.drown.org/starman.html");
   }
 }
 
