@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run -d --name smartbot-discord -v $PWD/karma.sqlite:/home/node/app/karma.sqlite smartbot-discord
