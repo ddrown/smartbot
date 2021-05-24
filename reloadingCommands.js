@@ -28,7 +28,11 @@ function fileEvents(eventType, filename) {
     }
   }
 }
-fs.watch("./smartbot", { persistent: false }, fileEvents);
+
+exports.startWatching = startWatching;
+function startWatching(directory) {
+  fs.watch(directory, { persistent: false }, fileEvents);
+}
 
 exports.onMessage = onMessage;
 function onMessage(client, from, reply, message) {

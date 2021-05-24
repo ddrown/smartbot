@@ -3,6 +3,8 @@ const commands = require('./reloadingCommands');
 const irc = require('irc');
 const {sleep} = require('./smartbot/utils');
 
+commands.startWatching("./smartbot");
+
 const ircOptions = {
   userName: config.username,
   realName: config.realname,
