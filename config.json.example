@@ -4,8 +4,9 @@
   "server": "irc.example.net",
   "serverport": 9999,
   "nick": "somebot",
-  "channel": "#botchannel",
+  "channel": [ "#botchannel" ],
   "app_id": "api key from openexchangerates.org",
   "weather_app_id": "api key from openweathermap.org",
+  "google_geocode_apikey": "api key from google with geocoding api access",
   "email": "set-this-email@example.com"
 }
