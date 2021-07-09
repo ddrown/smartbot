@@ -115,6 +115,7 @@ function fixSummary(summary) {
   if (summary === undefined || summary === null) {
     return;
   }
+  summary = summary.replace(/\r/g, '');
   if (summary.indexOf("\n") >= 0) {
     summary = summary.substring(0, summary.indexOf("\n")) + "...";
   }
