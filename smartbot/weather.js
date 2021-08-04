@@ -6,7 +6,7 @@ const db = require("./db");
 const citylookup = require("./citylookup");
 const citydb = db.open('cities.sqlite');
 
-const forcecountry = {
+const forcecountries = {
   dublin: "ie"
 };
 
@@ -16,11 +16,14 @@ async function getWeather(city) {
     appid: config.weather_app_id,
     units: "metric"
   };
+  let forceCountry;
+
   if(city.match(/^\d+$/)) {
     params.zip = `${city},us`;
-  } else if(forcecountry.hasOwnProperty(city.toLowerCase())) {
-    const country = forcecountry[city.toLowerCase()];
-    params.q = `${city},${country}`;
+    forceCountry = "us";
+  } else if(forcecountries.hasOwnProperty(city.toLowerCase())) {
+    forceCountry = forcecountries[city.toLowerCase()];
+    params.q = `${city},${forceCountry}`;
   } else {
     params.q = city;
   }
@@ -39,22 +42,24 @@ async function getWeather(city) {
   const kmh = Math.floor(conditions.wind.speed * 3600 / 1000);
   const mph = Math.floor(convert(kmh).from("km/h").to("mph"));
 
-  const cityName = await getCityName(await cityPromise, conditions.name, conditions.id, conditions.coord);
+  const cityName = await getCityName(await cityPromise, forceCountry, conditions.name, conditions.id, conditions.coord);
 
   return `${conditions.weather[0].description} at ${cityName}, ${degC} C / ${degF} F, ${conditions.main.humidity} %RH, wind ${kmh} km/h / ${mph} mph`;
 }
 
-async function getCityName(cityData, name, id, coord) {
+async function getCityName(cityData, forceCountry, name, id, coord) {
+  const country = forceCountry ? forceCountry : cityData && cityData.country;
+
   if (cityData) {
     if (cityData.state) {
-      return `${name}, ${cityData.state}, ${cityData.country}`;
+      return `${name}, ${cityData.state}, ${country}`;
     }
 
     console.log(`looking up state for ${name}`);
     const state = await citylookup.getCity(cityData.lat, cityData.lon);
     if (state) {
       await db.run(citydb, "update city set state=? where id=?", [state, id]);
-      return `${name}, ${state}, ${cityData.country}`;
+      return `${name}, ${state}, ${country}`;
     }
     console.log(`lookup failed for ${cityData.lat} ${cityData.lon}`);
   }
@@ -62,7 +67,7 @@ async function getCityName(cityData, name, id, coord) {
   if (coord.lat && coord.lon) {
     const state = await citylookup.getCity(coord.lat, coord.lon);
     if (state) {
-      return `${name}, ${state}, ${cityData.country}`;
+      return `${name}, ${state}, ${country}`;
     }
     console.log(`lookup failed for ${coord.lat} ${coord.lon}`);
   }
