@@ -54,3 +54,33 @@ function measures(client, respond, message) {
     client.say(respond, `error: ${e.message}`);
   }
 }
+
+exports.ctof = ctof;
+function ctof(client, respond, message) {
+  const command = message.split(' ');
+  if (command.length !== 2) {
+    client.say(respond, "!ctof #");
+    return;
+  }
+  const amount = parseInt(command[1], 10);
+  if (isNaN(amount)) {
+    client.say(respond, "!ctof #");
+    return;
+  }
+  convertUnit(client, respond, `!convert ${amount} C F`);
+}
+
+exports.ftoc = ftoc;
+function ftoc(client, respond, message) {
+  const command = message.split(' ');
+  if (command.length !== 2) {
+    client.say(respond, "!ftoc #");
+    return;
+  }
+  const amount = parseInt(command[1], 10);
+  if (isNaN(amount)) {
+    client.say(respond, "!ftoc #");
+    return;
+  }
+  convertUnit(client, respond, `!convert ${amount} F C`);
+}

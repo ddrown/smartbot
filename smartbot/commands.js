@@ -1,6 +1,6 @@
 const config = require("./config");
 const {money} = require("./money");
-const {convertUnit, measures} = require("./units");
+const {convertUnit, measures, ctof, ftoc} = require("./units");
 const {weather} = require("./weather");
 const {doMath} = require("./math");
 const {redditCat} = require("./reddit");
@@ -23,6 +23,10 @@ function onMessage(client, from, respond, message) {
     dumbbot(client, respond, message);
   } else if (message.startsWith("!convert ")) {
     convertUnit(client, respond, message);
+  } else if (message.startsWith("!ctof ")) {
+    ctof(client, respond, message);
+  } else if (message.startsWith("!ftoc ")) {
+    ftoc(client, respond, message);
   } else if (message.startsWith("!measures ") || message === "!measures") {
     measures(client, respond, message);
   } else if (message.startsWith("!money ")) {
