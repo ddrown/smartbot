@@ -9,7 +9,7 @@ const titleMapping = {
   "abcnews.go.com": metaDescription,
   "apple.news": title,
   "arstechnica.com": metaDescription,
-  "blog.dan.drown.org": metaDescription,
+  "blog.dan.drown.org": title,
   ".cbslocal.com": title,
   ".ctvnews.ca": metaDescription,
   "en.wikipedia.org": wikipedia,
@@ -111,6 +111,7 @@ async function wikipedia(url) {
   return urlInfo.extract;
 }
 
+exports.fixSummary = fixSummary;
 function fixSummary(summary) {
   if (summary === undefined || summary === null) {
     return;
