@@ -8,6 +8,7 @@ const {urlTitle, otherBotTraffic} = require("./urls");
 const {getCases} = require("./covid19");
 const {finance} = require("./finance");
 const {getKarma, updateKarma, botsnack, dumbbot} = require("./karma");
+const {gpt3} = require("./gpt3");
 
 exports.onMessage = onMessage;
 function onMessage(client, from, respond, message) {
@@ -53,6 +54,8 @@ function onMessage(client, from, respond, message) {
     updateKarma(client, respond, message, from);
   } else if (message === "!starman") {
     client.say(respond, "https://dan.drown.org/starman.html");
+  } else if (message.startsWith("!gpt3 ")) {
+    gpt3(client, respond, message);
   }
 }
 
