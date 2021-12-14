@@ -31,7 +31,7 @@ async function getGpt3(text) {
     ],
     "max_tokens": 60,
     "n": 1,
-    "temperature": 0.7,
+    "temperature": 0.9,
     "best_of": 1
   };
   console.log(request);
