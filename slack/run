@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker run -d --name smartbot-slack -e ignoreUrls=1 -v $PWD/karma.sqlite:/home/node/app/karma.sqlite -v $PWD/../cities.sqlite:/home/node/app/cities.sqlite smartbot-slack

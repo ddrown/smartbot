@@ -1,0 +1,6 @@
+#!/bin/sh
+
+SOURCE="$1"
+DESTDIR=smartbot-slack:/home/node/app/slack
+
+docker cp "$1" "$DESTDIR/$1"

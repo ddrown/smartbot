@@ -1,0 +1,5 @@
+{
+  "slack_oauth_token": "oauth token from slack",
+  "slack_signing_secret": "signing secret from slack",
+  "slack_app_token": "application token"
+}
