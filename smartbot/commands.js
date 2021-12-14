@@ -40,7 +40,7 @@ function onMessage(client, from, respond, message) {
     doMath(client, respond, message);
   } else if (message === "!cat") {
     redditCat(client, respond, message);
-  } else if (message.match(/https?:\/\//) && !config.ignoreUrls) {
+  } else if (message.match(/https?:\/\//) && process.env.ignoreUrls !== "1") {
     urlTitle(client, respond, message);
   } else if (message === "!hack") {
     client.say(respond, "No hax smartbot!");
