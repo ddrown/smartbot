@@ -40,7 +40,7 @@ function onMessage(client, from, respond, message) {
     doMath(client, respond, message);
   } else if (message === "!cat") {
     redditCat(client, respond, message);
-  } else if (message.match(/https?:\/\//)) {
+  } else if (message.match(/https?:\/\//) && !config.ignoreUrls) {
     urlTitle(client, respond, message);
   } else if (message === "!hack") {
     client.say(respond, "No hax smartbot!");
@@ -56,7 +56,23 @@ function onMessage(client, from, respond, message) {
     client.say(respond, "https://dan.drown.org/starman.html");
   } else if (message.startsWith("!gpt3 ")) {
     gpt3(client, respond, message);
+  } else if (message.startsWith("!rejoin ")) {
+    rejoin(client, message);
   }
+}
+
+async function rejoin(client, message) {
+  const command = message.split(" ");
+  command.shift();
+  const channel = command.join(" ");
+  if(typeof config.channel !== "object") {
+    return;
+  }
+  config.channel.forEach((configCh) => {
+    if (configCh === channel) {
+      client.join(channel)
+    }
+  });
 }
 
 console.log("loaded commands");
