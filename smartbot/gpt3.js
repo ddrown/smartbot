@@ -48,6 +48,10 @@ async function getGpt3(text) {
   );
   const bot = await resp.json();
   console.log(bot);
+  if (bot.error && bot.error.message) {
+    const answer = fixSummary(bot.error.message);
+    return answer;
+  }
   const choice = bot.choices.filter(result => result.text.length > 0);
   if (choice.length === 0) {
     return "[no output]";
@@ -64,6 +68,9 @@ async function getGpt3(text) {
 
 exports.gpt3 = gpt3;
 async function gpt3(client, respond, message) {
+  client.say(respond, "gpt3 free trial expired");
+  return;
+/*
   const command = message.split(' ');
   if (command.length < 2) {
     client.say(respond, "!gpt3 [text]");
@@ -77,4 +84,5 @@ async function gpt3(client, respond, message) {
   } catch(e) {
     client.say(respond, `!gpt3 error: ${e.message}`);
   }
+*/
 }
