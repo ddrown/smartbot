@@ -32,6 +32,7 @@ const titleMapping = {
   "www.cbc.ca": metaDescription,
   "www.cnbc.com": metaDescription,
   "www.cnn.com": metaDescription,
+  "www.engadget.com": title,
   "www.ksat.com": title,
   "www.kvue.com": title,
   "www.latimes.com": metaDescription,
@@ -41,10 +42,10 @@ const titleMapping = {
   "www.theglobeandmail.com": metaDescription,
   "www.theverge.com": metaDescription,
   "www.vice.com": title,
-  "www.youtube.com": youtube,
+  "www.youtube.com": title,
   "www.zerohedge.com": title,
-  "youtube.com": youtube,
-  "youtu.be": youtube,
+  "youtube.com": title,
+  "youtu.be": title,
 };
 
 async function oembed(queryUrl, url) {
