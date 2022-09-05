@@ -1,18 +1,29 @@
 const fetch = require('node-fetch');
 
+const shortcuts = {
+  "TELUS": "T.TO",
+  "SHAW": "SJR-B.TO"
+};
+
 function postMarket(price) {
   if(price.marketState === "REGULAR") {
     return "";
   }
   if(price.marketState === "PRE") {
-    const preGainloss = price.preMarketChange.raw > 0 ? `+${price.preMarketChange.fmt}` : price.preMarketChange.fmt;
-    return `beforemarket: ${price.currencySymbol}${price.preMarketPrice.fmt} (${preGainloss}, ${price.preMarketChangePercent.fmt})`;
+    if (price.preMarketSource === 'DELAYED' && (price.preMarketChange === undefined || price.preMarketChange.raw === undefined)) {
+      return "beforemarket data delayed";
+    }
+    const preGainloss = price.preMarketChange?.raw > 0 ? `+${price.preMarketChange?.fmt}` : price.preMarketChange?.fmt;
+    return `beforemarket: ${price.currencySymbol}${price.preMarketPrice?.fmt} (${preGainloss}, ${price.preMarketChangePercent?.fmt})`;
   }
   if(price.marketState !== "POST" && price.marketState !== "POSTPOST" && price.marketState !== "PREPRE") {
     return "";
   }
-  const postGainloss = price.postMarketChange.raw > 0 ? `+${price.postMarketChange.fmt}` : price.postMarketChange.fmt;
-  return `aftermarket: ${price.currencySymbol}${price.postMarketPrice.fmt} (${postGainloss}, ${price.postMarketChangePercent.fmt})`;
+  if (price.postMarketSource === 'DELAYED' && (price.postMarketChange === undefined || price.postMarketChange.raw === undefined)) {
+    return "aftermarket data delayed";
+  }
+  const postGainloss = price.postMarketChange?.raw > 0 ? `+${price.postMarketChange?.fmt}` : price.postMarketChange?.fmt;
+  return `aftermarket: ${price.currencySymbol}${price.postMarketPrice?.fmt} (${postGainloss}, ${price.postMarketChangePercent?.fmt})`;
 }
 
 function strState(price) {
@@ -22,7 +33,8 @@ function strState(price) {
   return `state=${price.marketState}`;
 }
 
-async function getPrice(ticker) {
+async function getPrice(ticker_orig) {
+  const ticker = shortcuts.hasOwnProperty(ticker_orig) ? shortcuts[ticker_orig] : ticker_orig;
   const url = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=price`;
   const quote = await fetch(url).then(res => res.json());
   if(quote.quoteSummary.error) {
@@ -34,8 +46,8 @@ async function getPrice(ticker) {
     return `unable to get prices for ${ticker}`;
   }
 
-  const gainloss = price.regularMarketChange.raw > 0 ? `+${price.regularMarketChange.fmt}` : price.regularMarketChange.fmt;
-  const regularStatus = `${price.shortName} (${price.quoteType}:${price.exchange}/${price.symbol}) ${price.currencySymbol}${price.regularMarketPrice.fmt} ${price.currency} (${gainloss}, ${price.regularMarketChangePercent.fmt})`;
+  const gainloss = price.regularMarketChange?.raw > 0 ? `+${price.regularMarketChange?.fmt}` : price.regularMarketChange?.fmt;
+  const regularStatus = `${price.shortName} (${price.quoteType}:${price.exchange}/${price.symbol}) ${price.currencySymbol}${price.regularMarketPrice?.fmt} ${price.currency} (${gainloss}, ${price.regularMarketChangePercent?.fmt})`;
 
   const postMarketStatus = postMarket(price);
   const state = strState(price);
@@ -50,7 +62,7 @@ async function finance(client, respond, message) {
     return;
   }
   const ticker = command[1].toUpperCase();
-  if (!ticker.match(/^[A-Z0-9.]+$/)) {
+  if (!ticker.match(/^[A-Z0-9.-]+$/)) {
     client.say(respond, "invalid characters in ticker name");
     return;
   }
