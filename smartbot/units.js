@@ -12,6 +12,22 @@ power.metric.hp = {
   to_anchor: 745.7
 };
 
+const unitAlias = {
+  mile: "mi",
+  miles: "mi",
+  "mi/h": "mph",
+  degC: "C",
+  degF: "F",
+  floz: "fl-oz"
+};
+
+function unit(name) {
+  if (unitAlias[name] !== undefined) {
+    return unitAlias[name];
+  }
+  return name;
+}
+
 exports.convertUnit = convertUnit;
 function convertUnit(client, respond, message) {
   const command = message.split(' ');
@@ -24,8 +40,8 @@ function convertUnit(client, respond, message) {
     client.say(respond, "!convert # from to");
     return;
   }
-  const from = command[2];
-  const to = command[3];
+  const from = unit(command[2]);
+  const to = unit(command[3]);
   try {
     const out = convert(amount).from(from).to(to);
     client.say(respond, `${amount} ${from} is ${out.toFixed(2)} ${to}`);
