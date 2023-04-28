@@ -1,8 +1,4 @@
-# for x86-64
-#ARG SOURCEIMG=node
-# for arm32 (Raspberry Pi)
-ARG SOURCEIMG=arm32v7/node
-FROM ${SOURCEIMG}:15
+FROM nodejs-20
 ADD . /home/node/app
 RUN chown -R node:node /home/node/app
 USER node
