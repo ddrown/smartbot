@@ -1,15 +1,17 @@
---- node_modules/irc/lib/irc.js.orig	2020-12-26 01:56:14.142422425 -0600
-+++ node_modules/irc/lib/irc.js	2020-11-27 16:54:39.350926252 -0600
-@@ -888,9 +888,10 @@
-             self.conn.connected = true;
-             if (self.conn.authorized ||
-                 (self.opt.selfSigned &&
--                    (self.conn.authorizationError   === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
-+                    (self.conn.authorizationError === 'DEPTH_ZERO_SELF_SIGNED_CERT' ||
-                      self.conn.authorizationError === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE' ||
--                     self.conn.authorizationError === 'SELF_SIGNED_CERT_IN_CHAIN')) ||
-+                     self.conn.authorizationError === 'SELF_SIGNED_CERT_IN_CHAIN' ||
-+                     self.conn.authorizationError === 'ERR_TLS_CERT_ALTNAME_INVALID')) ||
-                 (self.opt.certExpired &&
-                  self.conn.authorizationError === 'CERT_HAS_EXPIRED')) {
-                 // authorization successful
+--- node_modules/irc/lib/irc.js.orig	2023-04-27 13:38:45.988423798 -0500
++++ node_modules/irc/lib/irc.js	2023-04-27 13:39:11.655867157 -0500
+@@ -1151,6 +1151,7 @@
+                         case 'DEPTH_ZERO_SELF_SIGNED_CERT':
+                         case 'UNABLE_TO_VERIFY_LEAF_SIGNATURE':
+                         case 'SELF_SIGNED_CERT_IN_CHAIN':
++                        case 'ERR_TLS_CERT_ALTNAME_INVALID':
+                             if (!this.opt.selfSigned) {
+                                 return tlscon.destroy(tlscon.authorizationError);
+                             }
+@@ -1609,4 +1610,4 @@
+ function randomInt(length) {
+     return Math.floor(Math.random() * length);
+ }
+-//# sourceMappingURL=irc.js.map
+\ No newline at end of file
++//# sourceMappingURL=irc.js.map
