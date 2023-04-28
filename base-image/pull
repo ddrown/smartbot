@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker pull arm32v7/node:20
