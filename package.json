@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node repl.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,8 +15,8 @@
     "html-entities": "^2.0.2",
     "irc": "github:matrix-org/node-irc",
     "mathjs": "^8.1.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "node-html-parser": "^2.0.2",
-    "sqlite3": "^5.0.1"
+    "sqlite3": "^5.0.10"
   }
 }
