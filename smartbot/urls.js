@@ -13,20 +13,13 @@ const titleMapping = {
   ".cbslocal.com": title,
   ".ctvnews.ca": metaDescription,
   "en.wikipedia.org": wikipedia,
-  "gfycat.com": redditImg,
   "globalnews.ca": metaDescription,
-  "i.imgur.com": redditImg,
-  "imgur.com": redditImg,
-  "i.redd.it": redditImg,
   ".medium.com": ogTitle,
   "nationalpost.com": metaDescription,
   "news.ycombinator.com": title,
-  "old.reddit.com": reddit,
-  "reddit.com": reddit,
   "techcrunch.com": title,
   "torontosun.com": ogTitle,
   "twitter.com": twitter,
-  "v.redd.it": redditImg,
   "www.austinchronicle.com": ogTitle,
   "www.bbc.com": title,
   "www.cbc.ca": metaDescription,
@@ -36,7 +29,6 @@ const titleMapping = {
   "www.ksat.com": title,
   "www.kvue.com": title,
   "www.latimes.com": metaDescription,
-  "www.reddit.com": reddit,
   "www.reuters.com": metaDescription,
   "www.theatlantic.com": metaDescription,
   "www.theglobeandmail.com": metaDescription,
@@ -63,35 +55,6 @@ async function twitter(url) {
   const html = urlInfo.html;
   const newlineHtml = html.replace(/(<br>)+/ig, " ").replace(/([^ ])(<a)/ig, "$1 $2");
   return decode(newlineHtml.replace(/<[^>]*>/g, ""), {scope: "strict"});
-}
-
-async function reddit(url) {
-  const urlInfo = await oembed("https://www.reddit.com/oembed", url);
-  return urlInfo.title;
-}
-
-async function redditImg(url) {
-  if (
-      !url.match(/^https:\/\/[iv]\.redd\.it\/[a-zA-Z0-9]+(\.gif|\.jpg|\.png|)$/) &&
-      !url.match(/^https:\/\/(i\.)?imgur.com\/[a-zA-Z0-9]+(\.gif|\.jpg|\.gifv|\.png|)$/) &&
-      !url.match(/^https:\/\/gfycat.com\/[a-zA-Z0-9]+$/)
-  ) {
-    return;
-  }
-  const searchUrl = `https://www.reddit.com/search.json?q=url:${url}`;
-
-  const headers = {
-    "User-Agent": `smartbot/0.1 (https://github.com/ddrown/smartbot; ${config.email}) node-fetch/2.6.1`,
-    "Accept": "application/json; charset=utf-8",
-    "Accept-Language": "en"
-  };
-
-  const urlInfo = await fetch(searchUrl, {headers}).then(res => res.json());
-  if(!urlInfo.data.children.length) {
-    return;
-  }
-  const firstResult = urlInfo.data.children[0].data;
-  return `[${firstResult.subreddit_name_prefixed}] ${firstResult.title}`;
 }
 
 async function wikipedia(url) {
